@@ -195,7 +195,7 @@ plt.tight_layout()
 st.pyplot(fig2)
 #%% Assumptions
 with st.expander("Assumptions"):
-    st.markdown("""
+st.markdown("""
       ASSUMPTIONS & TECHNICAL GUIDANCE
       
       General:
