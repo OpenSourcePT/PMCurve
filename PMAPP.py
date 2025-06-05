@@ -122,7 +122,7 @@ plt.tight_layout()
 st.pyplot(fig1)
 
 #%% P-M Curve Calculation
-c_fine = np.arange(6, 100, 0.1)
+c_fine = np.arange(2, 100, 0.1)
 P_M_Curve = []
 for c in c_fine:
     bar_cg_force_moment = []
@@ -194,7 +194,7 @@ ax = plt.gca()
 plt.tight_layout()
 st.pyplot(fig2)
 #%% Assumptions
-with st.expander("📘 Assumptions & Technical Guidance"):
+with st.expander("Assumptions"):
     st.markdown("""
       ASSUMPTIONS & TECHNICAL GUIDANCE
       
@@ -220,6 +220,50 @@ with st.expander("📘 Assumptions & Technical Guidance"):
       - No slenderness, buckling, or second-order effects
       - Outside of pure compression the effects of confinement 
        or lack thereof are ignored
+    """, unsafe_allow_html=True)
+    with st.expander("Technical Details"):
+    st.markdown("""
+      Verison: 1.0
+      
+      Steps this analysis takes to create the curves:
+      1. Assume a neutral axis depth
+      2. Assume concrete is crushing at most extreme compression
+         fiber
+      3. Use Whitney Stress Block to find area in compression
+      4. Solve for the force and moment produced by compression
+      5. Solve for where bar CGs are in relation to neutral axis
+      6. Solve for strains of individual bars
+      7. Solve for bar forces and moments
+      8. Solve for resistance factor using most extreme tensile rebar
+         strain
+      9. Sum forces to find Pn
+      10. Sum moments for Mn
+      10. Factor Pn and Mn to solve for Pr and Mr
+      11. Impose restriction on Pn so that it cannot be greater 
+          than maximum axial load, including confiment effects
+
+      Technical Details
+      - Bending is about the x-axis
+      - Neutral axis depth is measured from the most extreme compression 
+        fiber
+      - The strain profile is assumed perfectly linear
+      - Strains are calculated using similar triangles
+      - The range of assumed neutral axis depths (c) start at 2in and 
+        go to 100in, with 0.1in steps. Anything lower than 2in for NA is too 
+        tensile. At these point I do not need to know about tensile interaction
+        but later this may be updated. 
+      - Full areas of steel are subtracted from the compression zone when their
+        CG falls within 0.85*c. This will lead to slightly lower compressive
+        forces than in reality until the 0.85*c is greater than the CG depth of 
+        the bar + 0.5*diameter_bar. Really it saves a lot of work to do it this way
+      - Steel material model is perfectly elastic-plastic
+      - Concrete material model is Whitney Stress Block
+      
+    """, unsafe_allow_html=True)
+    with st.expander("Credits"):
+    st.markdown("""
+    ITH 
+    Full code is free to use and expand: https://github.com/OpenSourcePT/PMCurve
     """, unsafe_allow_html=True)
 #%% PDF Export
 if export_pdf:
