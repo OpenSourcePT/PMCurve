@@ -18,7 +18,7 @@ ksi = 1000 * psi
 
 #%% Streamlit Setup
 st.set_page_config(page_title="P-M Curve Generator", layout="centered")
-st.title("P-M Curve Generator for Circular Concrete Columns")
+st.title("P-M Curve Generator for Circular Concrete Columns and Shaft", layout="centered"")
 st.sidebar.header("Design Parameters")
 #%% Sidebar Input
 
