@@ -230,8 +230,8 @@ if export_pdf:
         ax.axis("off")
         today = date.today().strftime("%B %d, %Y")
         ax.text(0.5, 0.75, "P-M Interaction Curve", fontsize=24, ha="center")
-        ax.text(0.5, 0.65, "Circular Concrete Drilled Shaft", fontsize=18, ha="center")
-        ax.text(0.5, 0.55, "AASHTO LRFD-Based Design 9th Edition", fontsize=14, ha="center")
+        ax.text(0.5, 0.65, "Circular Concrete Drilled Shaft or Column", fontsize=18, ha="center")
+        ax.text(0.5, 0.55, "AASHTO LRFD 9th Edition-Based Design  ", fontsize=14, ha="center")
         if project_name:
             ax.text(0.5, 0.45, f"Project: {project_name}", fontsize=12, ha="center")
         ax.text(0.5, 0.35, f"Designer: {designer_name}", fontsize=12, ha="center")
@@ -242,7 +242,7 @@ if export_pdf:
         # Parameters Page
         fig_params, ax = plt.subplots(figsize=(8.5, 11))
         ax.axis("off")
-        bar_coord_list = "\n        ".join([f"Bar {i+1:2d}: x = {x:.2f} in, y = {y:.2f} in" for i, (x, y) in bar_coords.items()])
+        bar_coord_list = "\n    ".join([f"Bar {i+1:2d}: x = {x:.2f} in, y = {y:.2f} in" for i, (x, y) in bar_coords.items()])
         param_text = f"""
 Design Parameters Summary
 
@@ -263,7 +263,7 @@ Material Properties
 • Concrete Crushing Strain    : 0.003
 
 Steel Bar Centroids (in):
-{bar_coord_list}
+    {bar_coord_list}
 """
         ax.text(0.01, 0.95, param_text, fontsize=11, va='top', ha='left', family='monospace')
         pdf.savefig(fig_params)
