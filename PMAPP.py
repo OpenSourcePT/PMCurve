@@ -263,6 +263,7 @@ with st.expander("Technical Details"):
 with st.expander("Credits"):
     st.markdown("""
 ITH 
+
 Full code is free to use and expand: https://github.com/OpenSourcePT/PMCurve
 """, unsafe_allow_html=True)
 #%% PDF Export
