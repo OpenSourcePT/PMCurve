@@ -279,7 +279,7 @@ with st.expander("Assumptions"):
       - Stress in steel follows ideal elastic-plastic behavior
       - Concrete stress follows Whitney Stress Block Method (0.85 * f'c)
       - Area of bars are removed from concrete compression zones by 
-        their full area as soon as the CG of the bar is the compression zone.
+        their full area once the CG of the bar is the compression zone.
       
       Bar Reinforcement:
       - ASTM standard sizes and areas used
@@ -293,8 +293,9 @@ with st.expander("Assumptions"):
       Limitations:
       - Only valid for circular sections
       - No slenderness, buckling, or second-order effects
-      - Outside of pure compression the effects of confinement 
-       or lack thereof are ignored
+      - Confinement of the concrete is only considered
+        for the pure axial compression case. The effects 
+        of confinement are expressed through the Beta factor
     """, unsafe_allow_html=True)
 with st.expander("Technical Details"):
     st.markdown("""
@@ -401,7 +402,7 @@ General:
 - Stress in steel follows ideal elastic-plastic behavior
 - Concrete stress follows Whitney Stress Block Method (0.85 * f'c)
 - Area of bars are removed from concrete compression zones by 
-  their full area as soon as the CG of the bar is the compression zone.
+  their full area once the CG of the bar is the compression zone.
 
 Bar Reinforcement:
 - ASTM standard sizes and areas used
@@ -415,8 +416,9 @@ Design Standard:
 Limitations:
 - Only valid for circular sections
 - No slenderness, buckling, or second-order effects
-- Outside of pure compression the effects of confinement 
-  or lack thereof are ignored
+- Confinement of the concrete is only considered
+  for the pure axial compression case. The effects 
+  of confinement are expressed through the Beta factor
 """
         ax.text(0.01, 0.95, notes_text, fontsize=11, va='top', ha='left', family='monospace')
         pdf.savefig(fig_notes)
