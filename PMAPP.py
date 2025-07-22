@@ -209,11 +209,27 @@ plt.grid(True, which='both', linestyle='--', linewidth=0.5)
 plt.axhline(y=0, color='black', linewidth=1)
 plt.axvline(x=0, color='black', linewidth=1)
 plt.legend()
+# Add major and minor grid
+plt.grid(True, which='major', linestyle='--', linewidth=0.75)
 plt.minorticks_on()
 plt.grid(which='minor', linestyle=':', linewidth=0.5)
+
+# Ticks every 250 units
+plt.gca().xaxis.set_major_locator(ticker.MultipleLocator(250),)
+plt.gca().yaxis.set_major_locator(ticker.MultipleLocator(250))
+
+# Add zero lines for x=0 and y=0
+plt.axhline(y=0, color='black', linewidth=1.5)
+plt.axvline(x=0, color='black', linewidth=0.2)
+
+# Legend, formatting
+plt.legend()
 plt.tick_params(which='major', length=6, width=1)
 plt.tick_params(which='minor', length=3, width=0.5)
+
 plt.axis('tight')
+# Add tick limiter to avoid warning
+ax = plt.gca()
 plt.tight_layout()
 st.pyplot(fig3)
 
