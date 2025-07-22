@@ -215,8 +215,8 @@ plt.minorticks_on()
 plt.grid(which='minor', linestyle=':', linewidth=0.5)
 
 # Ticks every 250 units
-plt.gca().xaxis.set_major_locator(ticker.MultipleLocator(1000),)
-plt.gca().yaxis.set_major_locator(ticker.MultipleLocator(1000))
+plt.gca().xaxis.set_major_locator(ticker.MultipleLocator(2000),)
+plt.gca().yaxis.set_major_locator(ticker.MultipleLocator(2000))
 
 # Add zero lines for x=0 and y=0
 plt.axhline(y=0, color='black', linewidth=1.5)
