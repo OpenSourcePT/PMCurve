@@ -45,9 +45,6 @@ if plot_user_points:
             user_points.append({"title": title, "P": P, "M": M})
 user_P = user_M = None
 
-if plot_user_point:
-    user_P = st.sidebar.number_input("Design Axial Load (kip)", value=100.0)
-    user_M = st.sidebar.number_input("Design Moment (kip-ft)", value=500.0)
 export_pdf = st.sidebar.checkbox("Export PDF Report")
 trans_bar_coeff = 0.85 if tie_type == "Spirals" else 0.80
 
