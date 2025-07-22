@@ -27,7 +27,8 @@ designer_name = st.sidebar.text_input("Designer Name", value="")
 diameter = st.sidebar.number_input("Column Diameter (in)", value=36.0, step=1.0) * inch
 cover = st.sidebar.number_input("Concrete Cover (in)", value=4.0, step=1.0) * inch
 number_of_bars = st.sidebar.number_input("Number of Bars", value=12, step=1)
-bar = int(st.sidebar.selectbox("Bar Size", [f"#{i}" for i in [3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 18, 20]]).replace("#", ""))
+bar = int(st.sidebar.selectbox("Longitudinal Bar Size", [f"#{i}" for i in [3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 18, 20]]).replace("#", ""))
+trans_bar = int(st.sidebar.selectbox("Tranverse Bar Size", [f"#{i}" for i in [3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 18, 20]]).replace("#", ""))
 fc = st.sidebar.number_input("Concrete Strength f'c (ksi)", value=4.0, step=1.0) * ksi
 fy = st.sidebar.number_input("Steel Yield Strength fy (ksi)", value=60.0, step=1.0) * ksi
 tie_type = st.sidebar.radio("Transverse Reinforcement Type", ["Spirals", "Hoops"])
@@ -50,9 +51,13 @@ steel_lookup_data = {
 }
 steel_table = pd.DataFrame(steel_lookup_data)
 bar_row = steel_table[steel_table['Bar'] == bar]
+trans_bar_row = steel_table[steel_table['Bar'] == trans_bar]
 if not bar_row.empty:
     area_bar = bar_row.iloc[0]["Area"]
     d_bar = bar_row.iloc[0]["Dia"]
+    trans_area_bar = trans_bar_row.iloc[0]["Area"]
+    trans_d_bar = trans_bar_row.iloc[0]["Dia"]
+
 else:
     st.stop()
 
@@ -102,7 +107,7 @@ def steel_stress(strain):
 
 #%% Rebar Layout
 angle_space = 360 / number_of_bars
-steel_cg = radius - cover - d_bar / 2
+steel_cg = radius - cover - trans_d_bar - d_bar / 2
 bar_coords = {
     barid: (steel_cg * np.cos(np.deg2rad(barid * angle_space)),
             steel_cg * np.sin(np.deg2rad(barid * angle_space)))
