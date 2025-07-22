@@ -32,7 +32,17 @@ trans_bar = int(st.sidebar.selectbox("Tranverse Bar Size", [f"#{i}" for i in [3,
 fc = st.sidebar.number_input("Concrete Strength f'c (ksi)", value=4.0, step=1.0) * ksi
 fy = st.sidebar.number_input("Steel Yield Strength fy (ksi)", value=60.0, step=1.0) * ksi
 tie_type = st.sidebar.radio("Transverse Reinforcement Type", ["Spirals", "Hoops"])
-plot_user_point = st.sidebar.checkbox("Plot Custom Design Point")
+plot_user_points = st.sidebar.checkbox("Plot Custom Design Points")
+
+user_points = []
+if plot_user_points:
+    num_points = st.sidebar.slider("Number of Points", min_value=1, max_value=5, value=1)
+    for i in range(num_points):
+        with st.sidebar.expander(f"Point {i + 1}"):
+            title = st.text_input(f"Label for Point {i + 1}", value=f"Pt {i + 1}", key=f"title_{i}")
+            P = st.number_input(f"Axial Load P (kip) for Point {i + 1}", value=100.0, key=f"P_{i}")
+            M = st.number_input(f"Moment M (kip-ft) for Point {i + 1}", value=500.0, key=f"M_{i}")
+            user_points.append({"title": title, "P": P, "M": M})
 user_P = user_M = None
 
 if plot_user_point:
@@ -174,10 +184,13 @@ Mr_vals = -P_M_Curve[:, 3] / (kip * ft)
 fig2 = plt.figure(figsize=(8.5, 11))
 plt.plot(Mn_vals, Pn_vals, label='Nominal (Pn-Mn)', color='blue', linewidth=2)
 plt.plot(Mr_vals, Pr_vals, label='Factored (Pr-Mr)', color='red', linestyle='--', linewidth=2)
-if plot_user_point and user_P is not None and user_M is not None:
-    plt.plot(user_M, user_P, 'ko', label='Design Point', markersize=8)
-    plt.axhline(y=user_P, color='black', linestyle=':', linewidth=1)
-    plt.axvline(x=user_M, color='black', linestyle=':', linewidth=1)
+if plot_user_points and user_points:
+    for pt in user_points:
+        plt.plot(pt["M"], pt["P"], 'ko', markersize=8)
+        plt.axhline(y=pt["P"], color='black', linestyle=':', linewidth=1)
+        plt.axvline(x=pt["M"], color='black', linestyle=':', linewidth=1)
+        plt.text(pt["M"], pt["P"], f' {pt["title"]}', fontsize=9, verticalalignment='bottom')
+
 plt.title('P-M Interaction Curve for Circular Concrete Column')
 plt.xlabel('Moment (kip-ft)')
 plt.ylabel('Axial Load (kip)')
@@ -218,10 +231,13 @@ user_M_in = user_M * ft if user_M else None
 fig3 = plt.figure(figsize=(8.5, 11))
 plt.plot(Mn_vals_in, Pn_vals, label='Nominal (Pn-Mn)', color='blue', linewidth=2)
 plt.plot(Mr_vals_in, Pr_vals, label='Factored (Pr-Mr)', color='red', linestyle='--', linewidth=2)
-if plot_user_point and user_P is not None and user_M is not None:
-    plt.plot(user_M_in, user_P, 'ko', label='Design Point', markersize=8)
-    plt.axhline(y=user_P, color='black', linestyle=':', linewidth=1)
-    plt.axvline(x=user_M_in, color='black', linestyle=':', linewidth=1)
+if plot_user_points and user_points:
+    for pt in user_points:
+        M_in = pt["M"] * ft
+        plt.plot(M_in, pt["P"], 'ko', markersize=8)
+        plt.axhline(y=pt["P"], color='black', linestyle=':', linewidth=1)
+        plt.axvline(x=M_in, color='black', linestyle=':', linewidth=1)
+        plt.text(M_in, pt["P"], f' {pt["title"]}', fontsize=9, verticalalignment='bottom')
 plt.title('P-M Interaction Curve (Moment in kip-in)')
 plt.xlabel('Moment (kip-in)')
 plt.ylabel('Axial Load (kip)')
