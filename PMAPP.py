@@ -27,7 +27,7 @@ designer_name = st.sidebar.text_input("Designer Name", value="")
 diameter = st.sidebar.number_input("Column Diameter (in)", value=36.0, step=1.0) * inch
 cover = st.sidebar.number_input("Concrete Cover (in)", value=4.0, step=1.0) * inch
 number_of_bars = st.sidebar.number_input("Number of Bars", value=12, step=1)
-bar = int(st.sidebar.selectbox("Bar Size", [f"#{i}" for i in range(3, 12)]).replace("#", ""))
+bar = int(st.sidebar.selectbox("Bar Size", [f"#{i}" for i in [3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 18, 20]]).replace("#", ""))
 fc = st.sidebar.number_input("Concrete Strength f'c (ksi)", value=4.0, step=1.0) * ksi
 fy = st.sidebar.number_input("Steel Yield Strength fy (ksi)", value=60.0, step=1.0) * ksi
 tie_type = st.sidebar.radio("Transverse Reinforcement Type", ["Spirals", "Hoops"])
