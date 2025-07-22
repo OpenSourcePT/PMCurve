@@ -31,6 +31,12 @@ bar = int(st.sidebar.selectbox("Bar Size", [f"#{i}" for i in [3, 4, 5, 6, 7, 8, 
 fc = st.sidebar.number_input("Concrete Strength f'c (ksi)", value=4.0, step=1.0) * ksi
 fy = st.sidebar.number_input("Steel Yield Strength fy (ksi)", value=60.0, step=1.0) * ksi
 tie_type = st.sidebar.radio("Transverse Reinforcement Type", ["Spirals", "Hoops"])
+plot_user_point = st.sidebar.checkbox("Plot Custom Design Point")
+user_P = user_M = None
+
+if plot_user_point:
+    user_P = st.sidebar.number_input("Design Axial Load (kip)", value=100.0)
+    user_M = st.sidebar.number_input("Design Moment (kip-ft)", value=500.0)
 export_pdf = st.sidebar.checkbox("Export PDF Report")
 trans_bar_coeff = 0.85 if tie_type == "Spirals" else 0.80
 
@@ -163,6 +169,10 @@ Mr_vals = -P_M_Curve[:, 3] / (kip * ft)
 fig2 = plt.figure(figsize=(8.5, 11))
 plt.plot(Mn_vals, Pn_vals, label='Nominal (Pn-Mn)', color='blue', linewidth=2)
 plt.plot(Mr_vals, Pr_vals, label='Factored (Pr-Mr)', color='red', linestyle='--', linewidth=2)
+if plot_user_point and user_P is not None and user_M is not None:
+    plt.plot(user_M, user_P, 'ko', label='Design Point', markersize=8)
+    plt.axhline(y=user_P, color='gray', linestyle=':', linewidth=1)
+    plt.axvline(x=user_M, color='gray', linestyle=':', linewidth=1)
 plt.title('P-M Interaction Curve for Circular Concrete Column')
 plt.xlabel('Moment (kip-ft)')
 plt.ylabel('Axial Load (kip)')
@@ -198,10 +208,15 @@ st.pyplot(fig2)
 #%% Additional Graph with Moment in kip-in
 Mn_vals_in = -P_M_Curve[:, 1] / kip  # kip-in
 Mr_vals_in = -P_M_Curve[:, 3] / kip  # kip-in
+user_M_in = user_M * ft if user_M else None
 
 fig3 = plt.figure(figsize=(8.5, 11))
 plt.plot(Mn_vals_in, Pn_vals, label='Nominal (Pn-Mn)', color='blue', linewidth=2)
 plt.plot(Mr_vals_in, Pr_vals, label='Factored (Pr-Mr)', color='red', linestyle='--', linewidth=2)
+if plot_user_point and user_P is not None and user_M is not None:
+    plt.plot(user_M_in, user_P, 'ko', label='Design Point', markersize=8)
+    plt.axhline(y=user_P, color='gray', linestyle=':', linewidth=1)
+    plt.axvline(x=user_M_in, color='gray', linestyle=':', linewidth=1)
 plt.title('P-M Interaction Curve (Moment in kip-in)')
 plt.xlabel('Moment (kip-in)')
 plt.ylabel('Axial Load (kip)')
