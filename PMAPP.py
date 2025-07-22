@@ -38,9 +38,9 @@ radius = diameter / 2
 
 #%% Steel Lookup
 steel_lookup_data = {
-    "Bar": [3, 4, 5, 6, 7, 8, 9, 10, 11],
-    "Area": [0.11, 0.20, 0.31, 0.44, 0.60, 0.79, 1.00, 1.27, 1.56],
-    "Dia": [0.375, 0.500, 0.625, 0.750, 0.875, 1.000, 1.128, 1.270, 1.410]
+    "Bar": [3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 18, 20],
+    "Area": [0.11, 0.20, 0.31, 0.44, 0.60, 0.79, 1.00, 1.27, 1.56, 2.25, 4, 4.91],
+    "Dia": [0.375, 0.500, 0.625, 0.750, 0.875, 1.000, 1.128, 1.270, 1.410, 1.693, 2.257, 2.5]
 }
 steel_table = pd.DataFrame(steel_lookup_data)
 bar_row = steel_table[steel_table['Bar'] == bar]
@@ -193,6 +193,32 @@ plt.axis('tight')
 ax = plt.gca()
 plt.tight_layout()
 st.pyplot(fig2)
+
+
+#%% Additional Graph with Moment in kip-in
+Mn_vals_in = -P_M_Curve[:, 1] / kip  # kip-in
+Mr_vals_in = -P_M_Curve[:, 3] / kip  # kip-in
+
+fig3 = plt.figure(figsize=(8.5, 11))
+plt.plot(Mn_vals_in, Pn_vals, label='Nominal (Pn-Mn)', color='blue', linewidth=2)
+plt.plot(Mr_vals_in, Pr_vals, label='Factored (Pr-Mr)', color='red', linestyle='--', linewidth=2)
+plt.title('P-M Interaction Curve (Moment in kip-in)')
+plt.xlabel('Moment (kip-in)')
+plt.ylabel('Axial Load (kip)')
+plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+plt.axhline(y=0, color='black', linewidth=1)
+plt.axvline(x=0, color='black', linewidth=1)
+plt.legend()
+plt.minorticks_on()
+plt.grid(which='minor', linestyle=':', linewidth=0.5)
+plt.tick_params(which='major', length=6, width=1)
+plt.tick_params(which='minor', length=3, width=0.5)
+plt.axis('tight')
+plt.tight_layout()
+st.pyplot(fig3)
+
+
+
 #%% Assumptions
 with st.expander("Assumptions"):
     st.markdown("""
@@ -350,6 +376,7 @@ Limitations:
         # Add plots
         pdf.savefig(fig1)
         pdf.savefig(fig2)
+        pdf.savefig(fig3)
 
     # Move this directly after the export_pdf checkbox section
     today_str = date.today().strftime("%Y-%m-%d")
